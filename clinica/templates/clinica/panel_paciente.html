@@ -1,0 +1,123 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="guia-pasos">
+    <strong>👵 Hola {{ paciente.usuario.first_name }}:</strong> Estás en tu portal personal.
+    Abajo puedes <strong>pedir una hora médica nueva</strong> o revisar tus citas agendadas.
+</div>
+
+<!-- PASO A PASO PARA RESERVAR HORA -->
+<div class="tarjeta">
+    <h2 style="margin-top:0; color:#028090;">📅 Paso 1: Pedir una Hora Médica Nueva</h2>
+
+    <form method="GET" action="{% url 'panel_paciente' %}" style="margin-bottom: 24px; background: #F4FBF9; padding: 18px; border-radius: 16px;">
+        <label for="especialidad">🔍 ¿Qué especialista necesita ver hoy? (Filtre por especialidad o presione Buscar Horas para ver todas):</label>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; align-items:center;">
+            <select name="especialidad" id="especialidad" style="max-width: 420px; width:100%; padding: 10px; border-radius: 8px; border: 1px solid #00A896;">
+                <option value="">-- Mostrar todas las especialidades --</option>
+                {% for esp in especialidades %}
+                    <option value="{{ esp.id }}" {% if especialidad_seleccionada == esp.id %}selected{% endif %}>
+                        {{ esp.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn-grande btn-secundario">Buscar Horas</button>
+            {% if especialidad_seleccionada %}
+                <a href="{% url 'panel_paciente' %}" class="btn-grande" style="background:#E0F2F1; color:#028090; text-decoration:none; padding:10px 16px; border-radius:8px;">Ver Todas</a>
+            {% endif %}
+        </div>
+    </form>
+
+    <h3 style="color:#028090;">👇 Horas Médicas Disponibles:</h3>
+    {% if horarios_disponibles %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+            {% for h in horarios_disponibles %}
+                <div style="background:#FAFFFE; border: 2px solid #00A896; border-radius: 14px; padding: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="background:#E0F2F1; color:#028090; font-weight:bold; font-size:0.85rem; padding:4px 10px; border-radius:12px; display:inline-block; margin-bottom:8px;">
+                        {{ h.medico.especialidad.nombre }}
+                    </div>
+                    <h4 style="margin: 6px 0; color:#1D3557; font-size:1.1rem;">👨‍⚕️ {{ h.medico }}</h4>
+                    <p style="margin: 8px 0; font-size: 1rem; color:#457B9D;">
+                        📆 <strong>Día:</strong> {{ h.fecha|date:"d/m/Y" }}<br>
+                        ⏰ <strong>Hora:</strong> {{ h.hora_inicio|time:"H:i" }} - {{ h.hora_fin|time:"H:i" }} hrs
+                    </p>
+                    <form method="POST" style="margin-top: 12px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="accion" value="reservar">
+                        <input type="hidden" name="horario_id" value="{{ h.id }}">
+                        <button type="submit" class="btn-grande" style="width:100%; background:#00A896; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">
+                            ✅ Elegir esta Hora Médica
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alerta alerta-info" style="background:#FFF8E7; border: 1px solid #FFE082; padding:16px; border-radius:10px; color:#8D6E63;">
+            No quedan horas libres en esta especialidad por ahora. Por favor elija otra especialidad arriba.
+        </div>
+    {% endif %}
+</div>
+
+<!-- MIS CITAS AGENDADAS -->
+<div class="tarjeta" style="margin-top: 24px;">
+    <h2 style="margin-top:0; color:#028090;">📋 Mis Horas Médicas Agendadas</h2>
+    {% if mis_citas %}
+        <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+            <thead>
+                <tr style="background:#E0F2F1; text-align:left;">
+                    <th style="padding:10px;">Fecha y Hora</th>
+                    <th style="padding:10px;">Médico y Especialidad</th>
+                    <th style="padding:10px;">Box</th>
+                    <th style="padding:10px;">Estado</th>
+                    <th style="padding:10px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in mis_citas %}
+                <tr style="border-bottom: 1px solid #E0E0E0;">
+                    <td style="padding:10px;"><strong>{{ c.horario.fecha|date:"d/m/Y" }}</strong> {{ c.horario.hora_inicio|time:"H:i" }}</td>
+                    <td style="padding:10px;">{{ c.medico }}</td>
+                    <td style="padding:10px;">Box {{ c.box.numero_box }}</td>
+                    <td style="padding:10px;"><span class="etiqueta-rol">{{ c.estado }}</span></td>
+                    <td style="padding:10px; display:flex; gap:8px;">
+                        <a href="{% url 'comprobante_cita' c.id %}" class="btn-grande btn-secundario" style="padding:6px 10px; font-size:0.85rem; text-decoration:none;">
+                            🎫 Comprobante
+                        </a>
+                        {% if c.estado == 'Confirmada' %}
+                        <form method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="accion" value="anular">
+                            <input type="hidden" name="cita_id" value="{{ c.id }}">
+                            <button type="submit" class="btn-grande btn-peligro" style="padding:6px 10px; font-size:0.85rem;">
+                                ❌ Anular
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aún no tienes citas reservadas. ¡Elige una hora arriba en el Paso 1!</p>
+    {% endif %}
+</div>
+
+<!-- MIS RECETAS E INDICACIONES DEL DOCTOR -->
+<div class="tarjeta" style="margin-top: 24px;">
+    <h2 style="margin-top:0; color:#028090;">💊 Mis Recetas e Indicaciones Médicas</h2>
+    {% if mis_recetas %}
+        {% for r in mis_recetas %}
+            <div style="background:#FFFDF2; border-left: 8px solid #FFD166; padding: 18px; border-radius: 14px; margin-bottom: 14px;">
+                <strong>📅 Atención del {{ r.fecha_registro|date:"d/m/Y" }} con {{ r.medico }}</strong>
+                <p style="margin:6px 0;"><strong>Diagnóstico:</strong> {{ r.diagnostico }}</p>
+                <p style="margin:6px 0;"><strong>💊 Receta / Remedios:</strong> {{ r.receta|default:"Sin medicamentos recetados" }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aquí aparecerán tus recetas cuando el médico finalice tu atención.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

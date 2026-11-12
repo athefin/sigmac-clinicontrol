@@ -1,0 +1,31 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="tarjeta" style="max-width: 700px; margin: 0 auto; border: 4px dashed #00A896; background: #FFFFFF;">
+    <div style="text-align: center; border-bottom: 3px solid #E0F2F1; padding-bottom: 16px;">
+        <span class="etiqueta-rol" style="background:#06D6A0;">✅ HORA MÉDICA CONFIRMADA</span>
+        <h1 style="margin: 12px 0 4px 0; color: #028090;">🎫 Comprobante de Cita #{{ cita.id }}</h1>
+        <p style="margin:0;">Centro Médico CliniControl (SIGMAC)</p>
+    </div>
+
+    <div style="padding: 20px 0; font-size: 1.2rem;">
+        <p>👤 <strong>Paciente:</strong> {{ cita.paciente.usuario.first_name }} {{ cita.paciente.usuario.last_name }} (RUT: {{ cita.paciente.rut }})</p>
+        <p>🩺 <strong>Profesional:</strong> {{ cita.medico }}</p>
+        <p>📅 <strong>Fecha de la Cita:</strong> {{ cita.horario.fecha|date:"d/m/Y" }}</p>
+        <p>⏰ <strong>Hora de Atención:</strong> {{ cita.horario.hora_inicio|time:"H:i" }} hrs</p>
+        <p style="background: #FFF3B0; padding: 14px; border-radius: 14px; font-size: 1.3rem;">
+            🚪 <strong>Lugar de Atención:</strong> Dirigirse al <strong>Box {{ cita.box.numero_box }}</strong> (Piso {{ cita.box.piso }})
+        </p>
+    </div>
+
+    <div class="guia-pasos" style="margin-bottom: 20px;">
+        💡 <strong>Consejo para su visita:</strong> Llegue 10 minutos antes con su carnet de identidad.
+    </div>
+
+    <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <button onclick="window.print()" class="btn-grande btn-secundario" style="flex:1;">🖨️ Imprimir Comprobante</button>
+        <a href="{% url 'login' %}" class="btn-grande" style="flex:1;">⬅️ Volver a mi Panel</a>
+    </div>
+</div>
+
+{% endblock %}

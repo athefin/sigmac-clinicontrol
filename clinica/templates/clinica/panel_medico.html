@@ -1,0 +1,81 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="guia-pasos">
+    <strong>👨‍⚕️ Portal Clínico Exclusivo — {{ medico }}:</strong>
+    En cumplimiento de la <strong>Ley N° 20.584</strong>, solo usted como profesional médico autenticado tiene acceso a visualizar y registrar diagnósticos en el Historial Clínico.
+</div>
+
+<div class="tarjeta">
+    <h2 style="margin-top:0; color:#028090;">📅 Mi Agenda de Pacientes Citados</h2>
+    {% if citas_medico %}
+        {% for c in citas_medico %}
+            <div style="border: 3px solid #A8DADC; border-radius: 18px; padding: 20px; margin-bottom: 20px; background: #FAFFFE;">
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center;">
+                    <div>
+                        <span class="etiqueta-rol">{{ c.estado }}</span>
+                        <h3 style="margin: 8px 0;">Paciente: {{ c.paciente.usuario.first_name }} {{ c.paciente.usuario.last_name }} (RUT: {{ c.paciente.rut }})</h3>
+                        <p style="margin:4px 0;">
+                            📆 <strong>Fecha:</strong> {{ c.horario.fecha|date:"d/m/Y" }} a las {{ c.horario.hora_inicio|time:"H:i" }} hrs |
+                            🚪 <strong>Box {{ c.box.numero_box }}</strong> |
+                            🏥 <strong>Previsión:</strong> {{ c.paciente.prevision }}
+                        </p>
+                    </div>
+                </div>
+
+                {% if c.estado == 'Confirmada' %}
+                    <form method="POST" style="margin-top: 16px; background: #FFFFFF; padding: 18px; border-radius: 14px; border: 2px solid #00A896;">
+                        {% csrf_token %}
+                        <input type="hidden" name="cita_id" value="{{ c.id }}">
+                        <h4 style="margin-top:0; color:#028090;">📝 Registrar Atención en Ficha Clínica (UC-03)</h4>
+
+                        <label>Diagnóstico Clínico: *</label>
+                        <textarea name="diagnostico" rows="2" placeholder="Ingrese el diagnóstico médico de la consulta..." required></textarea>
+
+                        <label>Receta Médica / Indicaciones farmacológicas:</label>
+                        <textarea name="receta" rows="2" placeholder="Ej: Paracetamol 500mg cada 8 horas por 5 días..."></textarea>
+
+                        <label>Observaciones Internas:</label>
+                        <input type="text" name="observaciones" placeholder="Observaciones adicionales de evolución...">
+
+                        <button type="submit" class="btn-grande" style="margin-top: 14px;">
+                            💾 Guardar en Historial Clínico y Finalizar Atención
+                        </button>
+                    </form>
+                {% else %}
+                    <p style="color: #1B4332; font-weight: bold; margin-top: 10px;">✅ Esta consulta ya fue atendida y registrada en la ficha del paciente.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay pacientes agendados en su lista por el momento.</p>
+    {% endif %}
+</div>
+
+<div class="tarjeta">
+    <h2 style="margin-top:0; color:#028090;">📂 Historial Clínico de Pacientes (Antecedentes)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Paciente</th>
+                <th>Diagnóstico</th>
+                <th>Receta Indicada</th>
+                <th>Médico Tratante</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for h in historiales_previos %}
+            <tr>
+                <td>{{ h.fecha_registro|date:"d/m/Y H:i" }}</td>
+                <td><strong>{{ h.paciente.usuario.first_name }} {{ h.paciente.usuario.last_name }}</strong><br><small>{{ h.paciente.rut }}</small></td>
+                <td>{{ h.diagnostico }}</td>
+                <td>{{ h.receta|default:"-" }}</td>
+                <td>{{ h.medico.usuario.first_name }} {{ h.medico.usuario.last_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

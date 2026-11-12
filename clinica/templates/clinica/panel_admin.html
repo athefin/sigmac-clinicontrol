@@ -1,0 +1,70 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="guia-pasos">
+    <strong>⚙️ Panel de Configuración del Sistema (Rol Administrador):</strong>
+    Cumple con la Historia de Usuario <strong>SCRUM-13</strong> para administrar Especialidades, Boxes de Atención y Bloques Horarios.
+</div>
+
+<div class="grilla-3">
+    <!-- Crear Box -->
+    <div class="tarjeta">
+        <h3 style="margin-top:0; color:#028090;">🚪 Nuevo Box de Atención</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="nuevo_box">
+            <label>Número de Box:</label>
+            <input type="number" name="numero_box" placeholder="Ej: 103" required>
+            <label>Piso:</label>
+            <input type="number" name="piso" value="1" required>
+            <button type="submit" class="btn-grande" style="width:100%; margin-top:16px;">➕ Guardar Box</button>
+        </form>
+        <p style="margin-top:14px;"><strong>Boxes activos:</strong>
+            {% for b in boxes %} Box {{ b.numero_box }} (Piso {{ b.piso }}){% if not forloop.last %}, {% endif %}{% endfor %}
+        </p>
+    </div>
+
+    <!-- Crear Especialidad -->
+    <div class="tarjeta">
+        <h3 style="margin-top:0; color:#028090;">🩺 Nueva Especialidad</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="nueva_especialidad">
+            <label>Nombre Especialidad:</label>
+            <input type="text" name="nombre" placeholder="Ej: Geriatría" required>
+            <label>Descripción breve:</label>
+            <input type="text" name="descripcion" placeholder="Atención integral del adulto mayor">
+            <button type="submit" class="btn-grande" style="width:100%; margin-top:16px;">➕ Crear Especialidad</button>
+        </form>
+    </div>
+
+    <!-- Crear Horario Médico -->
+    <div class="tarjeta">
+        <h3 style="margin-top:0; color:#028090;">⏰ Habilitar Horario Médico</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="nuevo_horario">
+            <label>Médico:</label>
+            <select name="medico_id" required>
+                {% for m in medicos %}
+                    <option value="{{ m.id }}">{{ m }}</option>
+                {% endfor %}
+            </select>
+            <label>Fecha:</label>
+            <input type="date" name="fecha" required>
+            <div class="grilla-2">
+                <div>
+                    <label>Hora Inicio:</label>
+                    <input type="time" name="hora_inicio" required>
+                </div>
+                <div>
+                    <label>Hora Fin:</label>
+                    <input type="time" name="hora_fin" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-grande" style="width:100%; margin-top:16px;">➕ Habilitar Bloque</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

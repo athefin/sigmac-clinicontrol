@@ -1,0 +1,61 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="guia-pasos">
+    <strong>📝 Inscripción de Paciente Nuevo:</strong> Complete sus datos con calma. Si se equivoca en alguno, el sistema le avisará amablemente.
+</div>
+
+<div class="tarjeta" style="max-width: 750px; margin: 0 auto;">
+    <h2 style="margin-top:0; color:#028090;">😊 Crear mi Cuenta en CliniControl</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="grilla-2">
+            <div>
+                <label>1. Su RUT (con guion): *</label>
+                <input type="text" name="rut" placeholder="Ej: 14.555.666-7" required>
+            </div>
+            <div>
+                <label>2. Su Previsión de Salud: *</label>
+                <select name="prevision">
+                    <option value="FONASA">Fonasa</option>
+                    <option value="ISAPRE">Isapre</option>
+                    <option value="PARTICULAR">Particular</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grilla-2">
+            <div>
+                <label>3. Sus Nombres: *</label>
+                <input type="text" name="nombres" placeholder="Ej: Juan Antonio" required>
+            </div>
+            <div>
+                <label>4. Sus Apellidos: *</label>
+                <input type="text" name="apellidos" placeholder="Ej: Pérez Morales" required>
+            </div>
+        </div>
+
+        <div class="grilla-2">
+            <div>
+                <label>5. Fecha de Nacimiento:</label>
+                <input type="date" name="fecha_nacimiento">
+            </div>
+            <div>
+                <label>6. Teléfono para avisarle su hora: *</label>
+                <input type="text" name="telefono" placeholder="Ej: +569 1234 5678" required>
+            </div>
+        </div>
+
+        <label>7. Correo Electrónico (opcional si no usa):</label>
+        <input type="email" name="correo" placeholder="ejemplo@correo.cl">
+
+        <label>8. Invente una Contraseña fácil de recordar para usted: *</label>
+        <input type="password" name="password" placeholder="Mínimo 6 letras o números" required>
+
+        <div style="margin-top: 28px;">
+            <button type="submit" class="btn-grande" style="width: 100%;">🎉 TERMINAR MI INSCRIPCIÓN</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

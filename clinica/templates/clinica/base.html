@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CliniControl (SIGMAC) - Tu Clínica Amiga</title>
+    <style>
+        :root {
+            --turquesa-vivo: #00A896;
+            --turquesa-oscuro: #028090;
+            --coral-alegre: #FF6B6B;
+            --amarillo-sol: #FFD166;
+            --verde-exito: #06D6A0;
+            --fondo-crema: #F4FBF9;
+            --blanco: #FFFFFF;
+            --texto-oscuro: #1A2E35;
+            --tamano-base: 19px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--fondo-crema);
+            color: var(--texto-oscuro);
+            font-size: var(--tamano-base);
+            line-height: 1.6;
+        }
+        /* Barra superior de accesibilidad para Adultos Mayores */
+        .barra-abuelitos {
+            background-color: var(--amarillo-sol);
+            color: var(--texto-oscuro);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-weight: bold;
+            border-bottom: 3px solid #E5B84B;
+        }
+        .controles-letra button {
+            background: var(--texto-oscuro);
+            color: var(--blanco);
+            border: none;
+            padding: 8px 16px;
+            margin-left: 6px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .controles-letra button:hover { background: var(--turquesa-oscuro); }
+
+        /* Encabezado Principal */
+        header {
+            background: linear-gradient(135deg, var(--turquesa-vivo), var(--turquesa-oscuro));
+            color: var(--blanco);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-decoration: none;
+            color: var(--blanco);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .btn-nav {
+            background-color: rgba(255,255,255,0.2);
+            color: var(--blanco);
+            padding: 12px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid var(--blanco);
+            transition: transform 0.15s;
+        }
+        .btn-nav:hover { background-color: var(--blanco); color: var(--turquesa-oscuro); transform: scale(1.04); }
+        .btn-coral { background-color: var(--coral-alegre); border-color: var(--coral-alegre); }
+        .btn-coral:hover { background-color: #ff4f4f; color: var(--blanco); }
+
+        /* Contenedor Principal */
+        .contenedor { max-width: 1150px; margin: 28px auto; padding: 0 20px; }
+
+        /* Tarjetas amigables */
+        .tarjeta {
+            background: var(--blanco);
+            border-radius: 22px;
+            padding: 28px;
+            margin-bottom: 26px;
+            box-shadow: 0 8px 20px rgba(2, 128, 144, 0.10);
+            border: 3px solid #D8F3DC;
+        }
+        .guia-pasos {
+            background-color: #E0FBF6;
+            border-left: 8px solid var(--turquesa-vivo);
+            padding: 18px 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+        /* Botones gigantes y claros */
+        .btn-grande {
+            display: inline-block;
+            background-color: var(--verde-exito);
+            color: var(--texto-oscuro);
+            padding: 16px 28px;
+            font-size: 1.15rem;
+            font-weight: 900;
+            border-radius: 16px;
+            border: 3px solid #05b384;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-grande:hover { filter: brightness(0.95); transform: translateY(-2px); }
+        .btn-peligro {
+            background-color: var(--coral-alegre);
+            color: var(--blanco);
+            border-color: #e05252;
+        }
+        .btn-secundario {
+            background-color: var(--amarillo-sol);
+            color: var(--texto-oscuro);
+            border-color: #e2b447;
+        }
+
+        /* Formularios grandes para fácil lectura */
+        label { display: block; font-weight: 800; margin-top: 14px; margin-bottom: 6px; font-size: 1.1rem; }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1.1rem;
+            border: 3px solid #A8DADC;
+            border-radius: 14px;
+            background-color: #FAFFFE;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--turquesa-vivo);
+            background-color: #FFFFFF;
+        }
+
+        /* Alertas de retroalimentación */
+        .alerta {
+            padding: 18px 24px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            font-weight: bold;
+            font-size: 1.15rem;
+            border: 3px solid transparent;
+        }
+        .alerta-success { background-color: #D8F3DC; color: #1B4332; border-color: #52B788; }
+        .alerta-error { background-color: #FFE5E5; color: #800F2F; border-color: #FF6B6B; }
+        .alerta-info, .alerta-warning { background-color: #FFF3B0; color: #5C4700; border-color: #FFD166; }
+
+        /* Grillas y Tablas */
+        .grilla-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .grilla-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+        th, td { padding: 14px; text-align: left; border-bottom: 2px solid #E0F2F1; }
+        th { background-color: var(--turquesa-oscuro); color: var(--blanco); font-size: 1.05rem; }
+        .etiqueta-rol {
+            background-color: var(--amarillo-sol);
+            color: var(--texto-oscuro);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 0.95rem;
+        }
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: var(--turquesa-oscuro);
+            color: var(--blanco);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="barra-abuelitos">
+        <span>👋 ¡Bienvenido(a)! Si las letras se ven pequeñas, presione estos botones para agrandarlas:</span>
+        <div class="controles-letra">
+            <button type="button" onclick="cambiarLetra(2)">🔍 A+ Agrandar Letra</button>
+            <button type="button" onclick="cambiarLetra(-2)">🔉 A- Achicar Letra</button>
+            <button type="button" onclick="resetLetra()">🔄 Tamaño Normal</button>
+        </div>
+    </div>
+
+    <header>
+        <a href="{% url 'inicio' %}" class="logo">🏥 CliniControl <small style="font-size:0.9rem; font-weight:normal;">(SIGMAC)</small></a>
+        <nav>
+            <a href="{% url 'inicio' %}" class="btn-nav">🏠 Inicio y Nuestra Clínica</a>
+            {% if user.is_authenticated %}
+                <span class="etiqueta-rol">👤 {{ user.first_name }} ({{ rol_actual }})</span>
+                {% if rol_actual == 'PACIENTE' %}
+                    <a href="{% url 'panel_paciente' %}" class="btn-nav">📅 Mi Portal de Citas</a>
+                {% elif rol_actual == 'MEDICO' %}
+                    <a href="{% url 'panel_medico' %}" class="btn-nav">🩺 Mi Agenda y Fichas</a>
+                {% elif rol_actual == 'RECEPCIONISTA' %}
+                    <a href="{% url 'panel_recepcionista' %}" class="btn-nav">🛎️ Panel Recepción</a>
+                {% elif rol_actual == 'ADMIN' %}
+                    <a href="{% url 'panel_admin' %}" class="btn-nav">⚙️ Panel Administrador</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-nav btn-coral">🚪 Salir de mi cuenta</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-nav">🔑 Entrar a mi Cuenta</a>
+                <a href="{% url 'registro' %}" class="btn-nav btn-coral">📝 Crear Cuenta Nueva</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="contenedor">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alerta alerta-{{ message.tags }}">
+                    📢 {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p><strong>🏥 Centro Médico CliniControl (Proyecto SIGMAC)</strong> — Atención cálida, rápida y sin filas para toda la familia.</p>
+        <p style="font-size: 0.9rem;">Cumplimiento Normativo: Ley N° 21.459 (Delitos Informáticos) • Ley N° 19.628 (Datos Personales) • Ley N° 20.584 (Ficha Clínica)</p>
+    </footer>
+
+    <script>
+        let tamanoActual = 19;
+        function cambiarLetra(cambio) {
+            tamanoActual = Math.min(28, Math.max(16, tamanoActual + cambio));
+            document.documentElement.style.setProperty('--tamano-base', tamanoActual + 'px');
+        }
+        function resetLetra() {
+            tamanoActual = 19;
+            document.documentElement.style.setProperty('--tamano-base', '19px');
+        }
+    </script>
+</body>
+</html>

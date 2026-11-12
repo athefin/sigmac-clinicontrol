@@ -1,0 +1,63 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="tarjeta" style="background: linear-gradient(135deg, #E0FBF6 0%, #FFF3B0 100%); border-color: #00A896;">
+    <h1 style="margin-top:0; font-size: 2.2rem; color: #028090;">🌞 ¡Hola! Pedir tu hora médica ahora es súper fácil y sin hacer filas</h1>
+    <p style="font-size: 1.25rem;">
+        En <strong>CliniControl (SIGMAC)</strong> diseñamos esta página pensando en ti y en nuestros adultos mayores.
+        Sin palabras complicadas: te guiamos paso a paso para que reserves tu consulta desde la casa.
+    </p>
+    <div style="margin-top: 22px; display: flex; gap: 16px; flex-wrap: wrap;">
+        {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn-grande">👉 PASO 1: Entrar con mi RUT</a>
+            <a href="{% url 'registro' %}" class="btn-grande btn-secundario">✨ Soy nuevo(a): Quiero Inscribirme</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-grande">👉 Ir a mi Panel Personal</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Guía didáctica en 3 pasos para abuelitos -->
+<div class="tarjeta">
+    <h2 style="color: #028090; margin-top: 0;">🧭 ¿Cómo funciona? Sigue estos 3 simples pasos:</h2>
+    <div class="grilla-3">
+        <div style="background: #E8F8F5; padding: 20px; border-radius: 18px; border: 2px solid #00A896;">
+            <h3 style="margin-top:0;">1️⃣ Ingresa tu RUT</h3>
+            <p>Haz clic en el botón verde <strong>"Entrar con mi RUT"</strong>. Si es tu primera vez, presiona el botón amarillo para inscribirte.</p>
+        </div>
+        <div style="background: #FFF8E7; padding: 20px; border-radius: 18px; border: 2px solid #FFD166;">
+            <h3 style="margin-top:0;">2️⃣ Elige tu Doctor</h3>
+            <p>Verás una lista clarita con el nombre del médico, su especialidad y los días libres. Solo debes tocar el botón <strong>"Elegir esta Hora"</strong>.</p>
+        </div>
+        <div style="background: #FDECEC; padding: 20px; border-radius: 18px; border: 2px solid #FF6B6B;">
+            <h3 style="margin-top:0;">3️⃣ Guarda tu Comprobante</h3>
+            <p>¡Listo! En pantalla aparecerá un boleto grande con el día, la hora y el número de Box al que debes llegar.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Apartado Sobre Nuestra Clínica -->
+<div class="tarjeta" id="sobre-nosotros">
+    <h2 style="color: #028090; margin-top: 0;">🏥 Conoce Nuestra Clínica: CliniControl</h2>
+    <p>
+        Somos un centro médico familiar y policlínico comprometido con modernizar la salud en Chile. Sabemos lo agotador
+        que era levantarse a las 6 de la mañana a hacer filas o llamar por teléfono sin que nadie contestara. Por eso creamos
+        <strong>SIGMAC (Sistema Integral de Gestión Médica y Agendamiento Clínico)</strong>, una plataforma pensada con cariño para cuidar tu tiempo y tu salud.
+    </p>
+    <div class="grilla-3" style="margin-top: 20px;">
+        <div style="background: #F4FBF9; padding: 18px; border-radius: 16px; border-left: 6px solid #06D6A0;">
+            <h4>💖 Trato Humano y Cercano</h4>
+            <p>Nuestros médicos y recepcionistas acompañan a cada paciente con paciencia, empatía y vocación de servicio.</p>
+        </div>
+        <div style="background: #F4FBF9; padding: 18px; border-radius: 16px; border-left: 6px solid #00A896;">
+            <h4>🔒 Ficha Médica Protegida</h4>
+            <p>Tus diagnósticos y recetas nunca se pierden. Solo tu médico tratante puede verlos de forma confidencial.</p>
+        </div>
+        <div style="background: #F4FBF9; padding: 18px; border-radius: 16px; border-left: 6px solid #FF6B6B;">
+            <h4>📍 Ubicación y Contacto</h4>
+            <p><strong>Dirección:</strong> Av. Salud Integral 1234, Santiago.<br><strong>Teléfono de ayuda:</strong> 600 123 4567 (Lunes a Sábado 08:00 a 20:00 hrs).</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

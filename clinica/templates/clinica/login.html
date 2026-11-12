@@ -1,0 +1,80 @@
+{% extends 'clinica/base.html' %}
+{% block content %}
+
+<div class="guia-pasos">
+    <strong>💡 Guía rápida:</strong> Escriba su RUT (con puntos y guion) en la primera cajita y su contraseña en la segunda. Luego presione el botón verde grande.
+</div>
+
+<div class="grilla-2">
+    <!-- Formulario de Login -->
+    <div class="tarjeta">
+        <h2 style="margin-top:0; color:#028090;">🔑 Entrar a mi Cuenta</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="rut">1. Escriba su RUT (RUN):</label>
+            <input type="text" id="rut" name="rut" placeholder="Ejemplo: 11.111.111-1" required>
+
+            <label for="password">2. Escriba su Contraseña:</label>
+            <input type="password" id="password" name="password" placeholder="Escriba aquí su clave secreta" required>
+
+            <div style="margin-top: 24px;">
+                <button type="submit" class="btn-grande" style="width: 100%;">✅ ENTRAR AHORA</button>
+            </div>
+        </form>
+
+        {% if intentos > 0 %}
+            <p style="margin-top:15px; text-align:center;">
+                <a href="{% url 'desbloquear_intentos' %}" style="color:#028090; font-weight:bold;">🔄 Desbloquear / Reiniciar intentos de seguridad</a>
+            </p>
+        {% endif %}
+
+        <hr style="margin: 24px 0; border: 1px solid #D8F3DC;">
+        <p style="text-align:center;">¿Todavía no está inscrito en la clínica?</p>
+        <a href="{% url 'registro' %}" class="btn-grande btn-secundario" style="width:100%;">📝 Crear mi Cuenta de Paciente</a>
+    </div>
+
+    <!-- Panel de Cuentas de Prueba para Demostración del MVP -->
+    <div class="tarjeta" style="background-color: #FFFDF2; border-color: #FFD166;">
+        <h3 style="margin-top:0; color:#028090;">🧪 Panel de Demostración (Credenciales por Rol)</h3>
+        <p style="font-size: 0.95rem;">
+            Para probar que <strong>cada rol ve únicamente su pantalla autorizada (RBAC)</strong>, presione primero este botón para crear los usuarios y horarios de ejemplo:
+        </p>
+        <a href="{% url 'cargar_datos_demo' %}" class="btn-grande btn-secundario" style="width:100%; margin-bottom: 18px;">
+            ⚡ Cargar Datos de Prueba (1 Clic)
+        </a>
+
+        <table style="font-size: 0.95rem;">
+            <thead>
+                <tr>
+                    <th>Rol en el Sistema</th>
+                    <th>RUT (Usuario)</th>
+                    <th>Contraseña</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>👵 <strong>Paciente</strong> (Doña Rosa)</td>
+                    <td><code>11.111.111-1</code></td>
+                    <td><code>clave1234</code></td>
+                </tr>
+                <tr>
+                    <td>👨‍⚕️ <strong>Médico</strong> (Dr. Carlos Soto)</td>
+                    <td><code>22.222.222-2</code></td>
+                    <td><code>clave1234</code></td>
+                </tr>
+                <tr>
+                    <td>🛎️ <strong>Recepcionista</strong> (Marcela)</td>
+                    <td><code>33.333.333-3</code></td>
+                    <td><code>clave1234</code></td>
+                </tr>
+                <tr>
+                    <td>⚙️ <strong>Administrador</strong> (Samantha)</td>
+                    <td><code>44.444.444-4</code></td>
+                    <td><code>clave1234</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
